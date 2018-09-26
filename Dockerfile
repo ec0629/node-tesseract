@@ -10,4 +10,4 @@ RUN apt-get install -y nodejs
 ENTRYPOINT [ "bash" ]
 
 # docker build -t jsimonit/node_ubuntu .
-# docker run --rm -it -v ${pwd}:/home/app --name node-app jsimonit/node_ubuntu
+# docker run --rm -it -p 3000:3000 -v ${pwd}:/home/app --name node-app jsimonit/node_ubuntu

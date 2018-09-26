@@ -11,10 +11,12 @@
   <div id="drop-area">
     <form action="/uploads" class="my-form" method="POST" enctype="multipart/form-data">
       <p>Upload multiple files with the file dialog or by dragging and dropping onto the dashed region</p>
-      <input type="file" name="upload" id="fileElem" accept="image/*">
-      <!-- <label class="button" for="fileElem">Select some files</label> -->
-      <input type="submit" value="Send" class="button">
+      <input type="file" name="upload" id="fileElem" accept="image/*" onchange="handleFiles(this.files)">
+      <label class="button" for="fileElem">Select some files</label>
     </form>
+  </div>
+  <div>
+    <textarea id="converted-text"></textarea>
   </div>
   <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

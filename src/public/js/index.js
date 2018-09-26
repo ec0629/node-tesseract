@@ -36,7 +36,10 @@ function uploadFile (file) {
     method: 'POST',
     data: formData
   })
-  .then(response => { console.log(response.body)})
+  .then(response => {
+    const textArea = document.getElementById('converted-text');
+    textArea.value = response.data;
+  })
   .catch(err => console.log(err));
 }
 
