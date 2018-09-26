@@ -26,7 +26,7 @@ function handleFiles (files) {
 }
 
 function uploadFile (file) {
-  let url = '/uploads';
+  let url = '/convert';
   let formData = new FormData();
 
   formData.append('upload', file);
