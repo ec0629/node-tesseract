@@ -1,5 +1,7 @@
 const events = ['dragenter', 'dragover', 'dragleave', 'drop'];
-let dropArea = document.getElementById('drop-area');
+const dropArea = document.getElementById('drop-area');
+const checkBox = document.querySelector('[type="checkbox"]');
+
 
 function preventDefaults (e) {
   e.preventDefault();
@@ -26,10 +28,12 @@ function handleFiles (files) {
 }
 
 function uploadFile (file) {
-  let url = '/convert';
-  let formData = new FormData();
+  const url = '/convert';
+  const formData = new FormData();
 
+  const deskewImage = checkBox.checked;
   formData.append('upload', file);
+  formData.append('deskewImage', deskewImage);
 
   axios({
     url,
@@ -56,4 +60,3 @@ events.forEach(eventName => {
 });
 
 dropArea.addEventListener('drop', handleDrop, false);
-
