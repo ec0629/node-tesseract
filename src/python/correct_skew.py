@@ -28,8 +28,6 @@ thresh = cv2.threshold(gray, 0, 255,
 coords = np.column_stack(np.where(thresh > 0))
 angle = cv2.minAreaRect(coords)[-1]
 
-print("[INFO] unadjusted angle: {:.3f}".format(angle))
-
 # the `cv2.minAreaRect` function returns values in the
 # range [-90, 0); as the rectangle rotates clockwise the
 # returned angle trends to 0 -- in this special case we
