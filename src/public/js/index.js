@@ -31,9 +31,14 @@ function uploadFile (file) {
   const url = '/convert';
   const formData = new FormData();
 
-  const deskewImage = checkBox.checked;
+  const options = {
+    deskewImage: checkBox.checked
+  };
+
   formData.append('upload', file);
-  formData.append('deskewImage', deskewImage);
+  formData.append('options', JSON.stringify(options));
+
+  console.log(formData);
 
   axios({
     url,
