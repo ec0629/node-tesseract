@@ -47,14 +47,18 @@ app.post('/convert', upload.single('upload'), (req, res) => {
     .then(() => {
       return convertImageToText(filePath);
     })
-    .then(data => {
-      res.send(data);
+    .then(convertedText => {
+      res.send(stripWhitespaceAndNewlines(convertedText));
       deleteImage(filePath);
     })
     .catch((err) => {
       console.log('Error:', err);
     });
 });
+
+function stripWhitespaceAndNewlines (text = '') {
+  return text.trim().replace(/\n/g, ' ');
+}
 
 function deleteImage (filePath) {
   fs.unlink(filePath, (err) => {
@@ -86,7 +90,7 @@ function convertImageToText (filePath) {
   return new Promise((resolve, reject) => {
     const child = spawn('tesseract', [filePath, 'stdout']);
     child.stdout.on('data', (data) => {
-      resolve(data);
+      resolve(data.toString('utf-8'));
     });
     child.stderr.on('data', (data) => {
       console.log('Error:', data.toString('utf-8'));
