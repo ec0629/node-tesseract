@@ -1,14 +1,14 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const uuidv4 = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const multer = require('multer');
 const { spawn } = require('child_process');
 
 const storage = multer.diskStorage({
   destination: 'tmp/',
   filename: function (req, file, cb) {
-    cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+    cb(null, `${uuid()}.${file.mimetype.split('/')[1]}`);
   }
 });
 
@@ -22,7 +22,7 @@ const upload = multer({
       next(new Error('Only image filetypes can be uploaded.'), false);
     }
   }
- });
+});
 
 const app = express();
 
@@ -30,37 +30,11 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.post('/convert', upload.single('upload'), (req, res) => {
-  const filePath = path.join(__dirname, '../', req.file.path);
-
-  const options = JSON.parse(req.body.options);
-
-  const preProcessingPromise = options.deskewImage
-    ? deskewImage(filePath)
-    : Promise.resolve();
-
-  preProcessingPromise
-    .then(() => {
-      return convertImageToText(filePath);
-    })
-    .then(convertedText => {
-      res.send(stripWhitespaceAndNewlines(convertedText));
-      deleteImage(filePath);
-    })
-    .catch((err) => {
-      console.log('Error:', err);
-    });
-});
-
-function stripWhitespaceAndNewlines (text = '') {
+function stripWhitespaceAndNewlines(text = '') {
   return text.trim().replace(/\n/g, ' ');
 }
 
-function deleteImage (filePath) {
+function deleteImage(filePath) {
   fs.unlink(filePath, (err) => {
     if (err) {
       throw new Error(`Unable to delete ${filePath}`, err);
@@ -68,25 +42,7 @@ function deleteImage (filePath) {
   });
 }
 
-function deskewImage (filePath) {
-  return new Promise((resolve, reject) => {
-    const child = spawn('python3', [
-      'src/python/correct_skew.py',
-      '--image',
-      filePath
-    ]);
-    child.on('exit', (code, signal) => {
-      if(!code) {
-        resolve();
-      }
-    });
-    child.stderr.on('data', (data) => {
-      reject(data.toString('utf-8'));
-    });
-  });
-}
-
-function convertImageToText (filePath) {
+function convertImageToText(filePath) {
   return new Promise((resolve, reject) => {
     const child = spawn('tesseract', [filePath, 'stdout']);
     child.stdout.on('data', (data) => {
@@ -102,6 +58,23 @@ function convertImageToText (filePath) {
     })
   });
 }
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.post('/convert', upload.single('upload'), (req, res) => {
+  const filePath = path.join(__dirname, '../', req.file.path);
+
+  convertImageToText(filePath)
+    .then(convertedText => {
+      res.send(stripWhitespaceAndNewlines(convertedText));
+      deleteImage(filePath);
+    })
+    .catch((err) => {
+      console.log('Error:', err);
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`App started on port ${PORT}`);
