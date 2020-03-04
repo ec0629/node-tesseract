@@ -1,0 +1,15 @@
+FROM node:12-buster
+
+WORKDIR /home/app
+COPY package.json .
+
+RUN apt-get update \
+  && apt-get upgrade -y \
+  && apt-get install -y tesseract-ocr \
+  && apt-get install -y libtesseract-dev \
+  && npm install
+
+ENTRYPOINT [ "bash" ]
+
+# docker build -f DockerDev -t node-ocr-dev .
+# docker run -it -p 3000:3000 -v ${pwd}/src:/home/app/src node-ocr-dev
