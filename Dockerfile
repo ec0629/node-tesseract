@@ -13,6 +13,3 @@ RUN apt-get update \
   && npm install
 
 ENTRYPOINT [ "npm", "start" ]
-
-# docker build -t node-ocr .
-# docker run --rm -d -p 3000:3000 node-ocr
