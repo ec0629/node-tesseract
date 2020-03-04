@@ -12,4 +12,4 @@ RUN apt-get update \
 ENTRYPOINT [ "bash" ]
 
 # docker build -f DockerDev -t node-ocr-dev .
-# docker run -it -p 3000:3000 -v ${pwd}/src:/home/app/src node-ocr-dev
+# docker run --rm -it -p 3000:3000 -v ${pwd}/src:/home/app/src node-ocr-dev

@@ -18,16 +18,15 @@ function unhighlight(e) {
 
 function handleDrop(e) {
   let dt = e.dataTransfer;
-  let files = dt.files;
+  let [file] = dt.files;
 
-  handleFiles(files);
+  uploadFile(files);
 }
 
-function handleFiles(files) {
-  // ([...files]).forEach(uploadFile);
-  const [file] = files;
-  return uploadFile(file);
-}
+// function handleFiles(files) {
+//   const [file] = files;
+//   return uploadFile(file);
+// }
 
 function uploadFile(file) {
   const url = '/convert';
@@ -72,14 +71,14 @@ dropArea.addEventListener('drop', handleDrop, false);
 const copyButton = document.getElementById('clipboard');
 copyButton.addEventListener('click', () => {
 
-  navigator.clipboard.read().then(data => {
+  navigator.clipboard.read().then((data) => {
     data.forEach((item) => {
       const type = item.types[0];
       if (["image/png", "image/jpeg"].includes(type)) {
         item.getType(type)
           .then((blob) => {
             const file = new File([blob], 'image', { type });
-            handleFiles([file])
+            uploadFile(file)
               .then((text) => {
                 if (window.isSecureContext) {
                   navigator.clipboard.writeText(text);
