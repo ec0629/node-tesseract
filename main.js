@@ -10,7 +10,7 @@ function createWindow() {
 
   mainWindow.loadFile('renderer/index.html');
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;

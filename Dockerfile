@@ -12,4 +12,4 @@ RUN apt-get update \
   && apt-get install -y libtesseract-dev \
   && npm install
 
-ENTRYPOINT [ "npm", "start" ]
+ENTRYPOINT [ "npm", "run", "start:server" ]

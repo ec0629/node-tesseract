@@ -68,11 +68,8 @@ dropArea.addEventListener('drop', handleDrop, false);
 const copyButton = document.getElementById('clipboard');
 copyButton.addEventListener('click', () => {
 
-  const test = clipboard.readImage();
-  const val = test.getSize();
-  const v = test.isEmpty();
-  const u = test.toDataURL();
-  const file = new File([test.toPNG()], 'image', { type: 'image/png' });
+  const img = clipboard.readImage();
+  const file = new File([img.toPNG()], 'image', { type: 'image/png' });
   uploadFile(file)
     .then((text) => {
       clipboard.writeText(text);
