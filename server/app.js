@@ -4,6 +4,7 @@ const fs = require('fs');
 const { v4: uuid } = require('uuid');
 const multer = require('multer');
 const { spawn } = require('child_process');
+const cors = require('cors');
 
 const storage = multer.diskStorage({
   destination: 'tmp/',
@@ -28,6 +29,7 @@ const app = express();
 
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 function stripWhitespaceAndNewlines(text = '') {

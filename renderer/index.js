@@ -1,3 +1,6 @@
+const axios = require('axios');
+const { clipboard } = require('electron');
+
 const events = ['dragenter', 'dragover', 'dragleave', 'drop'];
 const dropArea = document.getElementById('drop-area');
 const checkBox = document.querySelector('[type="checkbox"]');
@@ -19,17 +22,11 @@ function unhighlight(e) {
 function handleDrop(e) {
   let dt = e.dataTransfer;
   let [file] = dt.files;
-
   uploadFile(files);
 }
 
-// function handleFiles(files) {
-//   const [file] = files;
-//   return uploadFile(file);
-// }
-
 function uploadFile(file) {
-  const url = '/convert';
+  const url = 'http://localhost:3000/convert';
   const formData = new FormData();
 
 
@@ -71,24 +68,13 @@ dropArea.addEventListener('drop', handleDrop, false);
 const copyButton = document.getElementById('clipboard');
 copyButton.addEventListener('click', () => {
 
-  navigator.clipboard.read().then((data) => {
-    data.forEach((item) => {
-      const type = item.types[0];
-      if (["image/png", "image/jpeg"].includes(type)) {
-        item.getType(type)
-          .then((blob) => {
-            const file = new File([blob], 'image', { type });
-            uploadFile(file)
-              .then((text) => {
-                if (window.isSecureContext) {
-                  navigator.clipboard.writeText(text);
-                }
-              });
-          });
-
-      } else {
-        alert('No image data is not available on the clipboard.');
-      }
+  const test = clipboard.readImage();
+  const val = test.getSize();
+  const v = test.isEmpty();
+  const u = test.toDataURL();
+  const file = new File([test.toPNG()], 'image', { type: 'image/png' });
+  uploadFile(file)
+    .then((text) => {
+      clipboard.writeText(text);
     });
-  });
 });

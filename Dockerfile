@@ -4,7 +4,7 @@ FROM node:12-buster
 
 WORKDIR /home/app
 COPY package.json .
-COPY ./src ./src
+COPY ./server ./server
 
 RUN apt-get update \
   && apt-get upgrade -y \
