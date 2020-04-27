@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 
+app.allowRendererProcessReuse = true;
+
 let mainWindow;
 
 function createWindow() {
