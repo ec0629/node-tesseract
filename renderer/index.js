@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { clipboard } = require('electron');
 
 const events = ['dragenter', 'dragover', 'dragleave', 'drop'];
@@ -37,12 +36,12 @@ function uploadFile(file) {
   formData.append('upload', file);
   formData.append('options', JSON.stringify(options));
 
-  return axios({
-    url,
+  return fetch(url, {
     method: 'POST',
-    data: formData
+    body: formData,
   })
-    .then(({ data: text }) => {
+  .then((resp) => resp.text())
+  .then((text) => {
       const textArea = document.getElementById('converted-text');
       textArea.value = text;
       textArea.select();
